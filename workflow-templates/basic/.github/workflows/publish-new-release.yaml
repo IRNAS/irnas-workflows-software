@@ -87,7 +87,9 @@ jobs:
             Merging this PR to <code>dev</code> will not trigger any automated workflows.
 
             After merging this PR to the <code>dev</code> you **HAVE** to:
-            * Delete <code>${{ env.release_type }}/${{ env.release_version }}</code> branch.
+            * Make sure that you deleted <code>${{ env.release_type }}/${{ env.release_version }}</code> branch from before.
+
+            **Important**: Please do not delete master branch below!!!!
 
             ## :clipboard: Changelog
 
