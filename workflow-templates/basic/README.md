@@ -86,7 +86,7 @@ Changelog updates is picky sometimes.
 meaning whenever a Release is made a message is sent to a spefic Slack channel.
 
 To enable this you have to:
-1. Comment out whole Slack related block of code in `publish-new-release.yaml`.
-2. Set `SLACK_CHANNEL` variable to a Slack channel of your choice.
+1. Uncomment out whole Slack related block of code in `publish-new-release.yaml`.
+2. Set `SLACK_CHANNEL` field to a Slack channel of your choice.
 3. Find out who is Slack admin and tell them to enable a Slack Webhook for you.
 4. Optionally you can modify `SLACK_TITLE` to your needs.
