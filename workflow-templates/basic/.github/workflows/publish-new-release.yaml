@@ -56,17 +56,6 @@ jobs:
 
             ${{ steps.changelog-reader.outputs.changes }}
 
-      # - name: Send message to slack channel
-      #   uses: rtCamp/action-slack-notify@v2
-      #   env:
-      #     SLACK_CHANNEL: channel
-      #     SLACK_COLOR: '#00ff00' # green
-      #     SLACK_MESSAGE: "${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ env.release_version }}"
-      #     SLACK_TITLE: 'New Release :rocket:'
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #     MSG_MINIMAL: true
-      #     SLACK_FOOTER: ""
-
       - name: Create Pull Request to dev branch
         id: dev-pr
         uses: repo-sync/pull-request@v2
