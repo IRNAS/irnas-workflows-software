@@ -82,11 +82,8 @@ Changelog updates is picky sometimes.
 
 ## Extra stuff
 
-`publish-new-release.yaml` workflow has a possibility of Slack integration,
-meaning whenever a Release is made a message is sent to a spefic Slack channel.
-
-To enable this you have to:
-1. Uncomment out whole Slack related block of code in `publish-new-release.yaml`.
-2. Set `SLACK_CHANNEL` field to a Slack channel of your choice.
-3. Find out who is Slack admin and tell them that you need a Slack Webhook token. When you get it create a new repository secret with name SLACK_WEBHOOK, with a value set to Slack Webhook token.
-4. Optionally you can modify `SLACK_TITLE` to your needs.
+If you want to receive Slack notifications everytime are release is made just go to the channel and directly use Github subscribe commands
+```
+/github subscribe IRNAS/<repo>
+/github unsubscribe IRNAS/<repo> releases
+```
