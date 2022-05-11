@@ -85,5 +85,5 @@ Changelog updates is picky sometimes.
 If you want to receive Slack notifications everytime are release is made just go to the channel and directly use Github subscribe commands
 ```
 /github subscribe IRNAS/<repo>
-/github unsubscribe IRNAS/<repo> releases
+/github unsubscribe IRNAS/<repo> issues pulls commits deployments
 ```
