@@ -46,4 +46,3 @@ should update workflow files in all longlived branches, (which should be only
 
 This is needed because GitHub can decide from which branch it will take the
 workflow file, based on that how that workflow was triggered.
-

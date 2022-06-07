@@ -14,7 +14,6 @@ Specifically, they automate:
 * Tagging and creation of GitHub Release with Release notes that are identical
   to the latest version entry in the `CHANGELOG.md` file.
 
-
 ## How to use
 
 This group contains two workflows:
