@@ -64,7 +64,8 @@ root directory.
 
 If you do not have it yet please copy it from here:
 
-```markdown # Changelog
+```markdown
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
