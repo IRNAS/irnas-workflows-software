@@ -38,6 +38,8 @@ decide on a *kind of release*.
 ![basic_workflow](basic_workflow.png)
 
 Workflow `draft-new-release.yaml` will then do the following:
+* check if `master` exists, if not it will create it (`master` does not exist
+  when the project is created from our GitHub project template).
 * create `release/<version_number>` branch from either `dev` (you selected
   ***release***) or `master` (you selected ***hotfix***) branch.
 * Create new version entry in `CHANGELOG.md`, move *Unreleased* section into
