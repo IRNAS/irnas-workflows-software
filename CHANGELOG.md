@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.2.1] - 2023-07-11
+
 ### Fixed
 
-- Fix workflow files used by the repo itself.
+-   Fix workflow files used by the repo itself.
 
 ## [0.2.0] - 2023-07-11
 
@@ -28,7 +30,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   Second workflow group: _Zephyr_ that contains workflows and instructions.
 -   Workflow files for automating releases of this repository.
 
-[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.2.1...HEAD
+
+[0.2.1]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.2.0...v0.2.1
 
 [0.2.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.1.0...v0.2.0
 
