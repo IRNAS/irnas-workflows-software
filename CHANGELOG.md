@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix workflow files used by the repo itself.
+
 ## [0.2.0] - 2023-07-11
 
 ### Changed
