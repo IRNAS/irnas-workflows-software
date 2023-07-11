@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+-   Deprecated contents of the _Basic_ group and moved them into _Old Basic_ 
+    group. _Basic_ group now contains workflow files suited for trunk based 
+    development.
+
 ## [0.1.0] - 2022-06-07
 
 ### Added

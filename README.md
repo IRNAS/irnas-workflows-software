@@ -29,7 +29,7 @@ workflows do and how should they be used.
 Importing of workflows is done with old-fashioned copy and paste:
 
 1. Decide which group of workflows do you want, for example, `basic` group.
-2. Checkout the default branch of your repository (should be `dev`).
+2. Checkout the default branch of your repository (should be `main`).
 3. Copy the `.github` directory inside the `basic` folder into your project root
    directory (you might already have it, make sure that you don't erase present
    files).
@@ -42,7 +42,7 @@ tab, workflows that you just added will be there.
 
 Updating existing workflows is the same as importing them except you
 should update workflow files in all longlived branches, (which should be only
-`master` and `dev`) and commit changes to GitHub.
+`main`) and commit changes to the GitHub.
 
 This is needed because GitHub can decide from which branch it will take the
 workflow file, based on that how that workflow was triggered.
