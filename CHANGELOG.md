@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-07-11
+
 ### Changed
 
 -   Deprecated contents of the _Basic_ group and moved them into _Old Basic_ 
@@ -22,6 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   Second workflow group: _Zephyr_ that contains workflows and instructions.
 -   Workflow files for automating releases of this repository.
 
-[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.2.0...HEAD
+
+[0.2.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.1.0...v0.2.0
 
 [0.1.0]: https://github.com/IRNAS/irnas-workflows-software/compare/698dae5a57b59f1f6b5014ded7f686b168b32d04...v0.1.0
