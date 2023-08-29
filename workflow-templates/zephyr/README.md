@@ -11,8 +11,9 @@ Specifically, they provide:
 - Everything that [Basic](../basic/README.md) workflows already do: changelog
   preparation, tagging, publishing GitHub releases, etc.,
 - Running _builds_ on Pull Requests and during releases processes,
+- Running _tests_ on Pull Requests,
 - Caching of West modules and toolchains downloaded by East to speed up the
-  _build_ process,
+  project setup,
 - A way to change what _build_ means for each project,
 - A way to specify which artefacts are attached to the published GitHub releases
   for each project,
@@ -33,12 +34,13 @@ Needed files (relative to project's root dir):
 
 ### How to use
 
-This group contains four workflows:
+This group contains the following workflows:
 
 - `create-release.yaml`
 - `publish-release.yaml`
 - `build.yaml`
 - `label_pr.yaml`
+- `twister.yaml`
 
 They can be used in two different scenarios:
 
@@ -65,8 +67,8 @@ then the created release tag and Changelog update commit are deleted from the
 
 #### Pull requests
 
-`build.yaml` (and therefore _build_ process) is automatically triggered whenever
-a PR is opened, reopened or a new commit is pushed to the PR.
+`build.yaml` (aka. _build_ process) and `twister.yaml` are automatically
+triggered whenever a PR is opened, reopened or a new commit is pushed to the PR.
 
 ## How to configure _build_
 
@@ -138,8 +140,8 @@ artefacts or some dynamically generated report.
 To do that the `make pre-package` command can copy into the `artefacts` folder
 the `pre_changelog.md` and `post_changelog.md` markdown files.
 
-Contents of these files then becomes a part of the Release Notes in the
-following way:
+Contents of these files then become a part of the Release Notes in the following
+way:
 
 ```markdown
 # Release notes
@@ -155,7 +157,48 @@ If a section is not used, the corresponding file can be empty.
 `pre_changelog.md` and `post_changelog.md` files are not attached to the created
 release, even though they are present in the `artefacts` folder.
 
-### A short note about Make
+## Twister workflow
+
+Twister workflow performs the same project setup as `build.yaml` does before it
+starts executing the following `make` commands:
+
+```bash
+make install-dep
+make install-test-dep
+make project-setup
+make test
+make test-report-ci     # Runs always, even if "make test" failed
+make coverage-report-ci # Runs if make test succeded
+```
+
+Expected behaviour of `make` commands (those that weren't already described
+above):
+
+- `make install-test-dep` - Installs tooling needed by the testing.
+- `make test` - Runs tests with enabled coverage.
+- `make test-report-ci` - Creates test report. Runs always, even if `make test`
+  failed.
+- `make coverage-report-ci` - Creates coverage report.
+
+### Artefacts and reports
+
+Workflow will then:
+
+- Publish test report and
+- if the `make test` command is successful, it will also publish code coverage
+  summary as a comment on the PR.
+
+To see the test report you can click `Details` (next to any Twister check in the
+PR) -> `Summary`.
+
+Artefact `test-report` will also contain `test-report.html` which can be viewed
+in browser.
+
+![ci-checks](./ci-checks.png)
+
+![ci-summary](./ci-summary.png)
+
+## A short note about Make
 
 Make is a build automation tool, often used for managing source code
 dependencies and executing compiler commands.
