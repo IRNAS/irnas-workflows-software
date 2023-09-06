@@ -10,13 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
--   Example tests folder. It showcases basic test folder structure and use of 
+-   Example tests folder. It showcases basic test folder structure and use of
     the Ztest API.
 -   Twister workflow. This workflow runs whenever a PR is opened, reopened or a
-    commit is pushed to it. It sets up the project and runs a `make test` 
+    commit is pushed to it. It sets up the project and runs a `make test`
     command.
--   Migration script. This script helps with the migration of projects are still 
-    using the older GitFlow branching model to the newer Trunk-based development 
+-   Migration script. This script helps with the migration of projects are still
+    using the older GitFlow branching model to the newer Trunk-based development
     model.
 
 ## [0.2.1] - 2023-07-11
