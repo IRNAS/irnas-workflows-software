@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.4.0] - 2023-10-01
+
 ### Added
 
 -   CodeChecker workflow. On every push to the `main` branch it builds the 
@@ -16,16 +18,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Changed
 
 -   Improve existing `build.yaml` and `twister.yaml` workflows.
-    - APT dependencies are now installed directly in the workflows instead
-      of in the makefiles. They can now be cached, which means faster setup 
-      time of required workflow environments.
-    - `make install-test-dep` target was completely removed due to the above 
-      change.
-    - Build workflow is now triggered on every push to the `main` branch.
-      Only new `make quick-build` target is run in that case, everything
-      else stays the same.
-    - `make build` was renamed to the `make release` to better convey its
-      purpose.
+    -   APT dependencies are now installed directly in the workflows instead
+        of in the makefiles. They can now be cached, which means faster setup 
+        time of required workflow environments.
+    -   `make install-test-dep` target was completely removed due to the above 
+        change.
+    -   Build workflow is now triggered on every push to the `main` branch.
+        Only new `make quick-build` target is run in that case, everything
+        else stays the same.
+    -   `make build` was renamed to the `make release` to better convey its
+        purpose.
 -   Documentation in **workflow-templates/zephyr/README.md** was updated 
     accordingly.
 
@@ -68,7 +70,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   Second workflow group: _Zephyr_ that contains workflows and instructions.
 -   Workflow files for automating releases of this repository.
 
-[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.4.0...HEAD
+
+[0.4.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.3.0...v0.4.0
 
 [0.3.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.2.1...v0.3.0
 
