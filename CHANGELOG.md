@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+-   CodeChecker workflow. On every push to the `main` branch it builds the 
+    firmware, analyses it and stores the analysis to the CodeChecker server.
+    In PRs it builds, analyses the state of the feature branch and compares it
+    against the last server analysis. 
+
+### Changed
+
+-   Improve existing `build.yaml` and `twister.yaml` workflows.
+    - APT dependencies are now installed directly in the workflows instead
+      of in the makefiles. They can now be cached, which means faster setup 
+      time of required workflow environments.
+    - `make install-test-dep` target was completely removed due to the above 
+      change.
+    - Build workflow is now triggered on every push to the `main` branch.
+      Only new `make quick-build` target is run in that case, everything
+      else stays the same.
+    - `make build` was renamed to the `make release` to better convey its
+      purpose.
+-   Documentation in **workflow-templates/zephyr/README.md** was updated 
+    accordingly.
+
+### Fixed
+
+-   Fixed incorrect caching of `nrfutil-toolchain-manager.exe`.
+
 ## [0.3.0] - 2023-09-06
 
 ### Added
