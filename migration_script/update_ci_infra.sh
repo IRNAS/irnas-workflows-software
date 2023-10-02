@@ -58,13 +58,10 @@ if [ "$WORKFLOW_GROUP" != "basic" ] && [ "$WORKFLOW_GROUP" != "zephyr" ]; then
 	exit 1
 fi
 
-echo "Confirm the following statements: "
-echo " - You have just created a new GitHub release."
-echo " - You have merged the release PR into dev branch."
+echo "Confirm the following statement: "
 echo " - You don't have any uncommited or untracked changes laying around."
-echo " - You have no unmerged PRs."
 echo ""
-read -p "Confirm that above is true (yes/no): " -r
+read -p "Confirm that above is true (y/n): " -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 	echo "Aborting migration"
@@ -129,11 +126,6 @@ if [[ "$WORKFLOW_GROUP" == "zephyr" ]]; then
 fi
 
 rm -fr ${TEMPLATE_REPO}
-
-# Commit and push the changes.
-git add .
-git commit -m "Update CI infrastructure to the latest one from ${TEMPLATE_REPO}"
-git push
 
 echo ""
 echo ""

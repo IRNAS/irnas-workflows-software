@@ -15,6 +15,7 @@ make them executable, super user permissions will be needed:
 ```bash
 sudo wget -O /usr/bin/migrate_gitflow_to_tbd https://raw.githubusercontent.com/IRNAS/irnas-workflows-software/main/migration_script/migrate_gitflow_to_tbd.sh
 sudo wget -O /usr/bin/update_ci_infra https://raw.githubusercontent.com/IRNAS/irnas-workflows-software/main/migration_script/update_ci_infra.sh
+sudo chmod +x /usr/bin/migrate_gitflow_to_tbd
 sudo chmod +x /usr/bin/update_ci_infra
 ```
 

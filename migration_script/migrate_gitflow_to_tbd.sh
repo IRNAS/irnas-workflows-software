@@ -37,7 +37,7 @@ echo " - You have merged the release PR into dev branch."
 echo " - You don't have any uncommited or untracked changes laying around."
 echo " - You have no unmerged PRs."
 echo ""
-read -p "Confirm that above is true (yes/no): " -r
+read -p "Confirm that above is true (y/n): " -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 	echo "Aborting migration"
