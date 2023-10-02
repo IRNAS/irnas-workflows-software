@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: migrate_gitflow_to_tbd.sh PATH_TO_GIT_REPO WORKFLOW_GROUP
+# Usage: migrate_gitflow_to_tbd.sh PATH_TO_GIT_REPO
 #
 # Description:
 #    Migrate a Gitflow repository to a Trunk-based development style repository.
@@ -13,39 +13,8 @@
 #   PATH_TO_GIT_REPO    Relative or absolute path to the Git repository that you
 #                       want to migrate.
 #
-#   WORKFLOW_GROUP      Can be either "basic" or "zephyr".
-#                       Use "basic" if your project was created from a
-#                       irnas-projects-template repo.
-#                       Use "zephyr" if your project was created from a
-#                       irnas-zephyr-template repo.
 
-# Details:
-#   If WORKFLOW_GROUP is "basic", then the following will be done:
-#       1. Delete master branch, locally and remotely.
-#       2. Rename dev branch to main, locally and remotely.
-#       3. Delete contents of the .github directory.
-#       4. Clone the irnas-projects-template repository and copy its .github
-#       directory into the current repository.
-#       5. Delete the irnas-projects-template repository.
-#       6. Create a new commit with all the changes on the main and push to
-#       the remote.
-#
-#   If WORKFLOW_GROUP is "zephyr", then the following will be done:
-#       1.-3. Same as above.
-#       4. Clone the irnas-zephyr-template repository and copy its .github
-#       directory into the current repository.
-#       5. Copy scripts/requirements.txt, if it exists, only append it to the
-#       existing one.
-#       6. Copy scripts/pre_changelog.md and scripts/post_changelog.md files
-#       7. Copy makefile.
-#       8. Delete the irnas-zephyr-template repository.
-#       9. Create a new commit with all the changes on the main and push to
-#       the remote.
-#
-#       Manually change of the default branch and deletion of the dev branch in
-#       GitHub UI will be needed in the end.
-
-NUM_ARGS=2
+NUM_ARGS=1
 # Print help text and exit if -h, or --help or insufficient number of arguments
 # was given.
 if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ $# -lt ${NUM_ARGS} ]; then
@@ -120,44 +89,6 @@ git push origin -u main
 # Checkout main just in case there was no dev to begin with
 git checkout main
 
-if [[ "$WORKFLOW_GROUP" == "basic" ]]; then
-	TEMPLATE_REPO="irnas-projects-template"
-else
-	TEMPLATE_REPO="irnas-zephyr-template"
-fi
-
-# Get the template repo
-git clone https://github.com/IRNAS/${TEMPLATE_REPO}.git
-
-# Delete the .github directory and copy new one from the template repo.
-rm -fr .github
-cp -r ${TEMPLATE_REPO}/.github .
-
-REQS_EXISTS=false
-if [[ "$WORKFLOW_GROUP" == "zephyr" ]]; then
-	# Create scripts folder if it does not exist.
-	mkdir -p scripts
-	if [ -f scripts/requirements.txt ]; then
-		REQS_EXISTS=true
-	else
-		cp ${TEMPLATE_REPO}/scripts/requirements.txt scripts
-	fi
-
-	cp ${TEMPLATE_REPO}/scripts/pre_changelog.md scripts
-	cp ${TEMPLATE_REPO}/scripts/post_changelog.md scripts
-	cp ${TEMPLATE_REPO}/makefile .
-fi
-
-rm -fr ${TEMPLATE_REPO}
-
-# Add new line to .gitignore
-echo '!.github/workflows/build.yaml' >>.gitignore
-
-# Commit and push the changes.
-git add .
-git commit -m "Migrate to trunk-based development workflow"
-git push
-
 # Get the organization and repository name of the current repository.
 ORG_REPO=$(git config --get remote.origin.url | sed 's/.*\/\([^ ]*\/[^.]*\).*/\1/')
 
@@ -171,9 +102,5 @@ echo -e "\t1. Open https://github.com/$ORG_REPO/settings"
 echo -e "\t2. Under 'Default branch' click two arrows button, select 'main' and click 'Update'"
 echo -e "\t3. Open https://github.com/$ORG_REPO/branches"
 echo -e "\t4. Delete the 'dev' branch"
-if [[ $REQS_EXISTS ]]; then
-	echo -e "\t5. You have existing scripts/requirements.txt file, please append east and west to it manually, CI expects them to be there."
-	echo -e "\t6. Commit and push the changes to the remote."
-fi
 echo ""
 echo "Thats it, you are done!"

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+-   Split `migrate_gitflow_to_tbd.sh` script into another, `update_ci_infra.sh` 
+    script. First one now only does the branching model migration, second on 
+    updates the files related to the CI infrastructure.
+
 ## [0.4.0] - 2023-10-01
 
 ### Added
