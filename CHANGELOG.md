@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.5.0] - 2023-10-02
+
 ### Changed
 
 -   Split `migrate_gitflow_to_tbd.sh` script into another, `update_ci_infra.sh` 
@@ -76,7 +78,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   Second workflow group: _Zephyr_ that contains workflows and instructions.
 -   Workflow files for automating releases of this repository.
 
-[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.5.0...HEAD
+
+[0.5.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.4.0...v0.5.0
 
 [0.4.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.3.0...v0.4.0
 
