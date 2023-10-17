@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: migrate_gitflow_to_tbd.sh PATH_TO_GIT_REPO
+# Usage: migrate_gitflow_to_tbd.sh
 #
 # Description:
 #    Migrate a Gitflow repository to a Trunk-based development style repository.
@@ -8,28 +8,6 @@
 #    GitHub release and merged the release PR into dev. Also make sure that you
 #    do not have any uncommitted changes and any unmerged PRs.
 #
-# Arguments:
-#
-#   PATH_TO_GIT_REPO    Relative or absolute path to the Git repository that you
-#                       want to migrate.
-#
-
-NUM_ARGS=1
-# Print help text and exit if -h, or --help or insufficient number of arguments
-# was given.
-if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ $# -lt ${NUM_ARGS} ]; then
-	sed -ne '/^#/!q;s/.\{1,2\}//;1d;p' <"$0"
-	exit 1
-fi
-
-PATH_TO_GIT_REPO=$1
-WORKFLOW_GROUP=$2
-
-# Check that workflow group is valid.
-if [ "$WORKFLOW_GROUP" != "basic" ] && [ "$WORKFLOW_GROUP" != "zephyr" ]; then
-	echo "Invalid workflow group: $WORKFLOW_GROUP, aborting migration"
-	exit 1
-fi
 
 echo "Confirm the following statements: "
 echo " - You have just created a new GitHub release."
@@ -44,7 +22,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 	exit 1
 fi
 
-cd $PATH_TO_GIT_REPO
+PATH_TO_GIT_REPO=$(pwd)
 
 # Check if we are in a git repository.
 if git rev-parse --git-dir >/dev/null 2>&1; then
@@ -96,7 +74,7 @@ echo ""
 echo ""
 echo "***********************************************************************"
 echo ""
-echo "Automatic migration is done, please do the following manually:"
+echo "\e[1;93mAutomatic migration is done, please do the following manually:"
 echo ""
 echo -e "\t1. Open https://github.com/$ORG_REPO/settings"
 echo -e "\t2. Under 'Default branch' click two arrows button, select 'main' and click 'Update'"
