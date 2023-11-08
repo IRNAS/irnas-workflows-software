@@ -15,10 +15,17 @@
   - [Artefacts and reports](#artefacts-and-reports)
 - [CodeChecker workflow](#codechecker-workflow)
   - [Diff analysis results](#diff-analysis-results)
-  - [Required GitHub action secrets](#required-github-action-secrets)
 - [A short note about Make](#a-short-note-about-make)
+- [Required GitHub action secrets](#required-github-action-secrets)
+  - [General secrets](#general-secrets)
+  - [CodeChecker specific secrets](#codechecker-specific-secrets)
 
 <!-- vim-markdown-toc -->
+
+<!-- prettier-ignore -->
+> [!WARNING]
+> This workflow requires specific GitHub Actions secrets that need to be set.
+> See [Required GitHub Action secrets ](#required-github-action-secrets) section.
 
 ## Description
 
@@ -273,23 +280,6 @@ above):
 
 Diff results are always uploaded as `codechecker-diff.zip` artefact.
 
-### Required GitHub action secrets
-
-Two secrets are required for `codechecker.yaml` to function:
-
-- `CODECHECKER_CREDENTIALS` - JSON string with credentials for the CodeChecker
-  server.
-- `CODECHECKER_SERVER_URL` - URL where CodeChecker server is running.
-
-For example, if CodeChecker server is running on the IP `20.10.30.40:8001` and
-you prepared a account for the CI with username `ci_user` and password `ci_pass`
-then set the secrets like shown below:
-
-```
-CODECHECKER_CREDENTIALS={"client_autologin":true,"credentials":{"20.10.30.40:8001":"ci_user:ci_pass"}}
-CODECHECKER_SERVER_URL=20.10.30.40:8001
-```
-
 ## A short note about Make
 
 Make is a build automation tool, often used for managing source code
@@ -313,3 +303,53 @@ the above messages. We essentially aliased `make pre-build` and
 To learn more about Make read the excellent
 [Memfault's Interrupt blog](https://interrupt.memfault.com/blog/gnu-make-guidelines)
 about it.
+
+## Required GitHub action secrets
+
+Three secrets are required so that this workflow group works completely.
+
+### General secrets
+
+A fine-grained PAT (personal access token) needs to be provided so that action
+runner can clone IRNAS's private repos.
+
+Steps:
+
+1. Go to the [www.github.com](www.github.com), click on you profile picture on
+   the top-right, and select _Settings -> Developer settings_.
+2. Click _Personal access tokens -> fine-grained tokens_ and click button
+   _Generate new token_.
+3. Set the name of the token to the exact repository name plus `_runner`
+   postfix. For example, if you are configuring token for
+   `irnas-workflows-documentation` repo, then name of the token must be
+   `irnas-workflows-documentation_runner`.
+4. Set the **Expiration** to a 1 year, use `custom` option for that.
+5. Set **Resource owner** to IRNAS.
+6. Set **Repository access** to _all repositories_.
+7. Under **Repository permissions** find **Contents** and set access to
+   "Read-only".
+8. Click _Generate token_ button at the bottom.
+
+Copy the generated token and create a new GitHub Actions secret named
+`GIT_CREDENTIALS` inside of your repository.
+
+<!-- prettier-ignore -->
+> [!NOTE]
+> Token needs to be approved by the organisation admin for it to work.
+
+### CodeChecker specific secrets
+
+`codechecker.yaml` requires following to function:
+
+- `CODECHECKER_CREDENTIALS` - JSON string with credentials for the CodeChecker
+  server.
+- `CODECHECKER_SERVER_URL` - URL where CodeChecker server is running.
+
+For example, if CodeChecker server is running on the IP `20.10.30.40:8001` and
+you prepared a account for the CI with username `ci_user` and password `ci_pass`
+then set the secrets like shown below:
+
+```
+CODECHECKER_CREDENTIALS={"client_autologin":true,"credentials":{"20.10.30.40:8001":"ci_user:ci_pass"}}
+CODECHECKER_SERVER_URL=20.10.30.40:8001
+```
