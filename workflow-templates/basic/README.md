@@ -71,7 +71,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Extra stuff
 
-If you want to receive Slack notifications every time are release is made just
+If you want to receive Slack notifications every time the release is made just
 go to the desired channel and directly use GitHub subscribe commands:
 
 ```
