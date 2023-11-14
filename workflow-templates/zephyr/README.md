@@ -8,7 +8,7 @@
 - [How to use](#how-to-use)
   - [Release process](#release-process)
   - [Pull requests](#pull-requests)
-- [How to configure _build_](#how-to-configure-_build)
+- [How to configure build](#how-to-configure-build)
   - [Packaging build artefacts](#packaging-build-artefacts)
   - [Adding extra text to the Release notes](#adding-extra-text-to-the-release-notes)
 - [Twister workflow](#twister-workflow)
@@ -112,7 +112,7 @@ or a new commit is pushed to the PR:
 - `twister.yaml`
 - `codechecker.yaml`
 
-## How to configure _build_
+## How to configure build
 
 Besides a bit of Zephyr-specific environment setup and caching, the `build.yaml`
 is very generic and makes no assumptions about what a Zephyr project needs to do
