@@ -1,26 +1,26 @@
-# Zephyr
+# Zephyr <!-- omit in toc -->
 
 <!-- vim-markdown-toc GFM -->
 
-- [Zephyr](#zephyr)
-  - [Description](#description)
-  - [Dependencies](#dependencies)
-    - [GitHub action secrets](#github-action-secrets)
-  - [How to use](#how-to-use)
-  - [Self hosted runners](#self-hosted-runners)
-    - [Release process](#release-process)
-    - [Pull requests](#pull-requests)
-  - [How to configure build](#how-to-configure-build)
-    - [Packaging build artefacts](#packaging-build-artefacts)
-    - [Adding extra text to the Release notes](#adding-extra-text-to-the-release-notes)
-  - [Twister workflow](#twister-workflow)
-    - [Artefacts and reports](#artefacts-and-reports)
-  - [CodeChecker workflow](#codechecker-workflow)
-    - [Diff analysis results](#diff-analysis-results)
-  - [A short note about Make](#a-short-note-about-make)
-  - [Required GitHub action secrets](#required-github-action-secrets)
-    - [General secrets](#general-secrets)
-    - [CodeChecker specific secrets](#codechecker-specific-secrets)
+
+- [Description](#description)
+- [Dependencies](#dependencies)
+  - [GitHub action secrets](#github-action-secrets)
+- [How to use](#how-to-use)
+  - [Release process](#release-process)
+  - [Pull requests](#pull-requests)
+- [How to configure build](#how-to-configure-build)
+  - [Packaging build artefacts](#packaging-build-artefacts)
+  - [Adding extra text to the Release notes](#adding-extra-text-to-the-release-notes)
+- [Twister workflow](#twister-workflow)
+  - [Artefacts and reports](#artefacts-and-reports)
+- [CodeChecker workflow](#codechecker-workflow)
+  - [Diff analysis results](#diff-analysis-results)
+- [A short note about Make](#a-short-note-about-make)
+- [Required GitHub action secrets](#required-github-action-secrets)
+  - [General secrets](#general-secrets)
+  - [CodeChecker specific secrets](#codechecker-specific-secrets)
+- [Self hosted runners](#self-hosted-runners)
 
 <!-- vim-markdown-toc -->
 
@@ -87,12 +87,6 @@ They can be used in two different scenarios:
 - During a release process
 - In Pull Requests
 
-## Self hosted runners
-
-The `build.yaml` and `twister.yaml` workflows are configured to run on self-hosted GitHub runners. These runners are hosted on the internal Irnas server. 
-
-To change the runner configuration back to the default GitHub runners, modify the `runs-on` field in the workflow file. 
-This can be done by running the `sed -i 's/self-hosted/ubuntu-20.04/' /workflow-templates/zephyr/.github/workflows/*.yaml` command from the root directory of this repository.
 
 ### Release process
 
@@ -362,3 +356,10 @@ then set the secrets like shown below:
 CODECHECKER_CREDENTIALS={"client_autologin":true,"credentials":{"20.10.30.40:8001":"ci_user:ci_pass"}}
 CODECHECKER_SERVER_URL=20.10.30.40:8001
 ```
+
+## Self hosted runners
+
+The `build.yaml` and `twister.yaml` workflows are configured to run on self-hosted GitHub runners. These runners are hosted on the internal Irnas server. 
+
+To change the runner configuration back to the default GitHub runners, modify the `runs-on` field in the workflow file. 
+This can be done by running the `sed -i 's/self-hosted/ubuntu-20.04/' .github/workflows/*.yaml` command from the root directory of the repository you wish to modify the workflows in.

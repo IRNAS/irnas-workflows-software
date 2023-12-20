@@ -112,7 +112,7 @@ jobs:
       - name: Release resource
         # Always release the resource so other clients can claim it
         if: always()
-        run: scripts/rpi-jlink-server/request_resource.sh 600 10 http://$RPI_IP:7779/release-resource/${{ runner.name }}
+        run: scripts/rpi-jlink-server/request_resource.sh 60 5 http://$RPI_IP:7779/release-resource/${{ runner.name }}
 
       - name: Post-build clean
         # Only for self hosted runners
