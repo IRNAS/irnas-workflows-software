@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.6.0] - 2023-12-20
+
 ### Added
 
 -   `twister-rpi.yaml` which is used to run Twister tests on a device connected to a Raspberry Pi.
@@ -87,7 +89,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   Second workflow group: _Zephyr_ that contains workflows and instructions.
 -   Workflow files for automating releases of this repository.
 
-[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.6.0...HEAD
+
+[0.6.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.5.0...v0.6.0
 
 [0.5.0]: https://github.com/IRNAS/irnas-workflows-software/compare/v0.4.0...v0.5.0
 
