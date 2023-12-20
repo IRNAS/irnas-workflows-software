@@ -1,23 +1,21 @@
-name: Build
+name: Run Twister Tests on RPi
 
 on:
-  workflow_call:
-    inputs:
-      checkout_ref:
-        required: true
-        type: string
   pull_request:
     types: [opened, reopened, synchronize]
   push:
-    branches:
-      - "main"
+   branches:
+     - "main"
+
   workflow_dispatch:
 
 env:
   GIT_CREDENTIALS: ${{ secrets.GIT_CREDENTIALS }}
+  RPI_IP: ${{ secrets.RPI_IP }}
 
 jobs:
-  build:
+  twister-build:
+    name: "Run Unit Tests"
     runs-on: self-hosted
     defaults:
       run:
@@ -28,30 +26,15 @@ jobs:
 
     steps:
       - name: Checkout last PR commit
-        if: github.event_name == 'pull_request'
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           path: project
 
-      - name: Checkout last tag
-        if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.checkout_ref }}
-          path: project
-
-      - name: Checkout main
-        if: github.event_name == 'push'
-        uses: actions/checkout@v3
-        with:
-          ref: main
-          path: project
-
       # This is needed due to the later east update (west update) command that
       # could be cloning from the private repos. The provided token in
       # GIT_CREDENTIALS needs to be a fine-grained token, with access to all
-      # repositores, with "Read-only" access level to the Content repository
+      # repositories, with "Read-only" access level to the Content repository
       # permissions.
       - name: Set Git credentials
         run: |
@@ -61,10 +44,10 @@ jobs:
         if: contains(runner.name, 'Github Action')
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: gcc-multilib
+          packages: gcc-multilib lcov
           # Update this manually when changing the packages above, increment
           # only minor version to keep APT caches separate.
-          version: 1.0
+          version: 2.0
 
       - name: Retrieve cache
         if: contains(runner.name, 'Github Action')
@@ -99,38 +82,68 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
 
-      - name: Install project dependencies
+      - name: Install dependencies
         run: make install-dep
 
       - name: Setup project
         run: make project-setup
 
-      - name: Pre-build
-        run: make pre-build
+      - name: Request resource
+        # The request_resource script takes the following arguments: timeout, retry_interval, url
+        run: scripts/rpi-jlink-server/request_resource.sh 600 10 http://$RPI_IP:7779/request-resource/${{ runner.name }}
 
-      - name: Quick build
-        if: github.event_name == 'push'
-        run: make quick-build
+      - name: Run tests
+        run: make test-remote
 
-      - name: Release
-        if:
-          github.event_name == 'workflow_dispatch' || github.event_name ==
-          'pull_request'
-        run: make release
-
-      - name: Pre-package
-        if: github.event_name == 'workflow_dispatch'
-        run: make pre-package
-
-      - name: Package artefacts
-        if: github.event_name == 'workflow_dispatch'
+      - name: Create test report
+        if: always()
+        run: make test-report-ci
+        
+      - name: Upload Unit Test Results
+        if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: artefacts
-          path: project/artefacts/*
+          name: test-report
+          path: |
+            project/twister-out/twister-report.html
+            project/twister-out/twister.xml
+            project/twister-out/twister.log
+
+      - name: Release resource
+        # Always release the resource so other clients can claim it
+        if: always()
+        run: scripts/rpi-jlink-server/request_resource.sh 60 5 http://$RPI_IP:7779/release-resource/${{ runner.name }}
 
       - name: Post-build clean
         # Only for self hosted runners
         # Makes sure east init does not fail in the project setup
         if: ${{ always() && !contains(runner.name, 'Github Action') }}
         run: rm -rf ${{ github.workspace }}/.west
+
+  twister-test-results:
+    name: "Publish Unit Tests Results"
+    needs: twister-build
+    if: always()
+    # These permissions must be set for the EnricoMi/publish-unit-test-result-action
+    # See https://github.com/EnricoMi/publish-unit-test-result-action#permissions
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+    # WARNING: This must be run on Github Hosted Action Runners, as they allow the usage of Docker
+    # An alternative would be to create a custom Docker image with Docker-in-Docker enabled
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Download Artefacts
+        uses: actions/download-artifact@v3
+        with:
+          name: test-report
+          path: test-report
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.9.0
+        with:
+          check_name: Unit Test Results
+          files: test-report/twister.xml
+          comment_mode: off

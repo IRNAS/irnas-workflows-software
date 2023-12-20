@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+-   `twister-rpi.yaml` which is used to run Twister tests on a device connected to a Raspberry Pi.
+-   Docs related to `twister-rpi.yaml` and self-hosted workflows.
+
+### Changed
+
+-   Migrate `build.yaml`, `twister.yaml` and `codechecker.yaml` to `self-hosted` runners.
+
 ## [0.5.0] - 2023-10-02
 
 ### Changed
