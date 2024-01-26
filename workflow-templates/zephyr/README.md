@@ -310,6 +310,7 @@ about it.
 ## Required GitHub action secrets
 
 Three secrets are required so that this workflow group works completely.
+The secrets have to be set in the project's repository under _Settings->Secrets and variables -> Actions_. Press the _New secret_ button.
 
 ### General secrets
 
@@ -332,9 +333,8 @@ Steps:
 7. Under **Repository permissions** find **Contents** and set access to
    "Read-only".
 8. Click _Generate token_ button at the bottom.
-
-Copy the generated token and create a new GitHub Actions secret named
-`GIT_CREDENTIALS` inside of your repository.
+9. Copy the generated token.
+10. Create a new github action secret named `GIT_CREDENTIALS` and paste the token.
 
 <!-- prettier-ignore -->
 > [!NOTE]
@@ -342,20 +342,13 @@ Copy the generated token and create a new GitHub Actions secret named
 
 ### CodeChecker specific secrets
 
-`codechecker.yaml` requires following to function:
+CodeChecker requires the following secrets to function:
 
-- `CODECHECKER_CREDENTIALS` - JSON string with credentials for the CodeChecker
-  server.
-- `CODECHECKER_SERVER_URL` - URL where CodeChecker server is running.
+1. `CODECHECKER_CREDENTIALS` - JSON string with credentials for the CodeChecker
+  server in the following format: `{"client_autologin":true,"credentials":{"<server_url_with_port>":"<ci_username>:<ci_password>"}}`.
+2. `CODECHECKER_SERVER_URL` - URL where the CodeChecker server is running.
 
-For example, if CodeChecker server is running on the IP `20.10.30.40:8001` and
-you prepared a account for the CI with username `ci_user` and password `ci_pass`
-then set the secrets like shown below:
-
-```
-CODECHECKER_CREDENTIALS={"client_autologin":true,"credentials":{"20.10.30.40:8001":"ci_user:ci_pass"}}
-CODECHECKER_SERVER_URL=20.10.30.40:8001
-```
+For the IRNAS server URL and password, check 1Password by searching "ci_user".
 
 ## Self hosted runners
 
