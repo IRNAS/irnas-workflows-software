@@ -13,7 +13,7 @@ repository to the latest one in the template repositories.
 new GitHub release and merged the release PR into dev. Also make sure that you
 do not have any uncommitted changes and any unmerged PRs.
 
-Expected usages, **make sure that you run the commands from the project's git
+**Additionaly, make sure that you run the commands from the project's git
 root dir**:
 
 ```bash
