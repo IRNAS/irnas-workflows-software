@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout last PR commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           path: project
@@ -69,7 +69,7 @@ jobs:
           restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.8"
           cache: "pip"
@@ -126,7 +126,7 @@ jobs:
     name: "Publish Unit Tests Results"
     # WARNING: This step is incompatible with self-hosted runners as it uses the 'publish-unit-test-result' action.
     # This would require us to run docker-in-docker in the self-hosted runner.
-    
+
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -158,7 +158,8 @@ jobs:
       issues: write
       pull-requests: write
     needs: twister-build
-    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+    if:
+      ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
 
     steps:
       - name: Download Artefacts
