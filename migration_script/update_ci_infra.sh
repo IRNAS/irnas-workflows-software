@@ -31,49 +31,48 @@
 #       the remote.
 
 echo "Confirm the following statement: "
-echo " - You don't have any uncommited or untracked changes laying around."
+echo " - You don't have any uncommitted or untracked changes laying around."
 echo ""
 read -p "Confirm that above is true (y/n): " -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-	echo "Aborting migration"
-	exit 1
+    echo "Aborting migration"
+    exit 1
 fi
 
 read -p "Which workflow group do you want to update (basic/zephyr): " -r
 WORKFLOW_GROUP=$REPLY
 # Check that workflow group is valid.
 if [ "$WORKFLOW_GROUP" != "basic" ] && [ "$WORKFLOW_GROUP" != "zephyr" ]; then
-	echo ""
-	echo "Invalid workflow group: $WORKFLOW_GROUP, aborting migration"
-	exit 1
+    echo ""
+    echo "Invalid workflow group: $WORKFLOW_GROUP, aborting migration"
+    exit 1
 fi
-
-PATH_TO_GIT_REPO=$(pwd)
 
 # Check if we are in a git repository.
 if git rev-parse --git-dir >/dev/null 2>&1; then
-	:
+    :
 else
-	echo "This is not a git repository, aborting migration"
-	exit 1
+    echo "This is not a git repository, aborting migration"
+    exit 1
 fi
 
 # Make sure that there are no uncommitted changes or untracked files.
-if [[ ! -z "$(git status -s)" ]]; then
-	echo "This repository has untracked files, aborting migration"
-	exit 1
+if [[ -n "$(git status -s)" ]]; then
+    echo "This repository has untracked files, aborting migration"
+    exit 1
 fi
 
 # Make sure that we are really in top level directory.
-cd $(git rev-parse --show-toplevel)
+cd "$(git rev-parse --show-toplevel)" ||
+echo "Failed to move to the top level git directory" && exit 1
 
 # Checkout main just in case there was no dev to begin with
 git checkout main
 
 if [[ "$WORKFLOW_GROUP" == "basic" ]]; then
-	TEMPLATE_REPO="irnas-projects-template"
+    TEMPLATE_REPO="irnas-projects-template"
 else
-	TEMPLATE_REPO="irnas-zephyr-template"
+    TEMPLATE_REPO="irnas-zephyr-template"
 fi
 
 # Get the template repo
@@ -83,21 +82,20 @@ git clone https://github.com/IRNAS/${TEMPLATE_REPO}.git
 rm -fr .github
 cp -r ${TEMPLATE_REPO}/.github .
 
-REQS_EXISTS=false
 if [[ "$WORKFLOW_GROUP" == "zephyr" ]]; then
-	# Create scripts folder if it does not exist.
-	mkdir -p scripts
-	cp ${TEMPLATE_REPO}/scripts/requirements.txt scripts
-	cp ${TEMPLATE_REPO}/scripts/pre_changelog.md scripts
-	cp ${TEMPLATE_REPO}/scripts/post_changelog.md scripts
-	cp ${TEMPLATE_REPO}/scripts/codechecker-diff.sh scripts
-	cp ${TEMPLATE_REPO}/makefile .
-	cp ${TEMPLATE_REPO}/.clang-format .
-	cp ${TEMPLATE_REPO}/.clang-tidy .
-	cp ${TEMPLATE_REPO}/.clangd .
-	cp ${TEMPLATE_REPO}/.gitignore .
-	cp ${TEMPLATE_REPO}/.gitlint .
-	cp ${TEMPLATE_REPO}/codechecker_config.yaml .
+    # Create scripts folder if it does not exist.
+    mkdir -p scripts
+    cp ${TEMPLATE_REPO}/scripts/requirements.txt scripts
+    cp ${TEMPLATE_REPO}/scripts/pre_changelog.md scripts
+    cp ${TEMPLATE_REPO}/scripts/post_changelog.md scripts
+    cp ${TEMPLATE_REPO}/scripts/codechecker-diff.sh scripts
+    cp ${TEMPLATE_REPO}/makefile .
+    cp ${TEMPLATE_REPO}/.clang-format .
+    cp ${TEMPLATE_REPO}/.clang-tidy .
+    cp ${TEMPLATE_REPO}/.clangd .
+    cp ${TEMPLATE_REPO}/.gitignore .
+    cp ${TEMPLATE_REPO}/.gitlint .
+    cp ${TEMPLATE_REPO}/codechecker_config.yaml .
 fi
 
 rm -fr ${TEMPLATE_REPO}

@@ -98,7 +98,7 @@ jobs:
       - name: Create test report
         if: always()
         run: make test-report-ci
-        
+
       - name: Upload Unit Test Results
         if: always()
         uses: actions/upload-artifact@v3

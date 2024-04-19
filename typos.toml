@@ -5,3 +5,4 @@ check-file = true
 
 [default.extend-words]
 rsource = "rsource"
+BA = "BA"

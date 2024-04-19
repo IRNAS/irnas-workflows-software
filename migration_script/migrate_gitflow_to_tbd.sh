@@ -12,34 +12,33 @@
 echo "Confirm the following statements: "
 echo " - You have just created a new GitHub release."
 echo " - You have merged the release PR into dev branch."
-echo " - You don't have any uncommited or untracked changes laying around."
+echo " - You don't have any uncommitted or untracked changes laying around."
 echo " - You have no unmerged PRs."
 echo ""
 read -p "Confirm that above is true (y/n): " -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-	echo "Aborting migration"
-	exit 1
+    echo "Aborting migration"
+    exit 1
 fi
-
-PATH_TO_GIT_REPO=$(pwd)
 
 # Check if we are in a git repository.
 if git rev-parse --git-dir >/dev/null 2>&1; then
-	:
+    :
 else
-	echo "This is not a git repository, aborting migration"
-	exit 1
+    echo "This is not a git repository, aborting migration"
+    exit 1
 fi
 
 # Make sure that there are no uncommitted changes or untracked files.
-if [[ ! -z "$(git status -s)" ]]; then
-	echo "This repository has untracked files, aborting migration"
-	exit 1
+if [[ -n "$(git status -s)" ]]; then
+    echo "This repository has untracked files, aborting migration"
+    exit 1
 fi
 
 # Make sure that we are really in top level directory.
-cd $(git rev-parse --show-toplevel)
+cd "$(git rev-parse --show-toplevel)" ||
+echo "Failed to move to the top level git directory" && exit 1
 
 # Make sure that the state of the repository is as expected.
 git checkout master
@@ -47,9 +46,9 @@ git pull
 git checkout dev
 git pull
 
-if [[ ! -z "$(git diff master dev)" ]]; then
-	echo "This repository has some changes between master and dev, aborting migration"
-	exit 1
+if [[ -n "$(git diff master dev)" ]]; then
+    echo "This repository has some changes between master and dev, aborting migration"
+    exit 1
 fi
 
 # Delete master branch

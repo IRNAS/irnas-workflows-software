@@ -2,7 +2,6 @@
 
 <!-- vim-markdown-toc GFM -->
 
-
 - [Description](#description)
 - [Dependencies](#dependencies)
   - [GitHub action secrets](#github-action-secrets)
@@ -27,37 +26,34 @@
 <!-- prettier-ignore -->
 > [!WARNING]
 > This workflow requires specific GitHub Actions secrets that need to be set.
-> See [Required GitHub Action secrets ](#required-github-action-secrets) section.
+> See [Required GitHub Action secrets](#required-github-action-secrets) section.
 
 ## Description
 
-Workflows in this group extend the workflows in [Basic](../basic/README.md)
-group and introduce several new functionalities which aid in the development of
-the projects using Zephyr.
+Workflows in this group extend the workflows in [Basic](../basic/README.md) group and introduce
+several new functionalities which aid in the development of the projects using Zephyr.
 
 Specifically, they provide:
 
-- Everything that [Basic](../basic/README.md) workflows already do: changelog
-  preparation, tagging, publishing GitHub releases, etc.,
-- Running various _builds_ on pushes to `main` branch, on Pull Requests and
-  during releases processes,
+- Everything that [Basic](../basic/README.md) workflows already do: changelog preparation, tagging,
+  publishing GitHub releases, etc.,
+- Running various _builds_ on pushes to `main` branch, on Pull Requests and during releases
+  processes,
 - Running _tests_ on Pull Requests,
-- Analysing _builds_ with Codechecker, storing results to the server and
-  generating diffs on Pull Requests,
-- Caching of West modules, APT packages and toolchains downloaded by East to
-  speed up the project setup,
-- A way to configure what CI does on project basis without changing workflow
-  files,
-- A way to specify which artefacts are attached to the published GitHub releases
-  for each project,
+- Analysing _builds_ with Codechecker, storing results to the server and generating diffs on Pull
+  Requests,
+- Caching of West modules, APT packages and toolchains downloaded by East to speed up the project
+  setup,
+- A way to configure what CI does on project basis without changing workflow files,
+- A way to specify which artefacts are attached to the published GitHub releases for each project,
 - A tag and Changelog cleanup steps when _build_ goes wrong and
 - A way to add custom text to the release notes.
 
 ## Dependencies
 
-Workflows in this group expect specific files to be present in the repository to
-function properly. If you created your repository from `irnas-zephyr-template`
-then you are all set with basic defaults.
+Workflows in this group expect specific files to be present in the repository to function properly.
+If you created your repository from `irnas-zephyr-template` then you are all set with basic
+defaults.
 
 Needed files (relative to project's root dir):
 
@@ -68,8 +64,7 @@ Needed files (relative to project's root dir):
 ### GitHub action secrets
 
 Currently only `codechecker.yaml` requires GitHub Action secrets to work. Check
-[CodeChecker workflow](#codechecker-workflow) section to learn what exactly is
-needed.
+[CodeChecker workflow](#codechecker-workflow) section to learn what exactly is needed.
 
 ## How to use
 
@@ -87,29 +82,25 @@ They can be used in two different scenarios:
 - During a release process
 - In Pull Requests
 
-
 ### Release process
 
 To trigger a release process just follow the instructions in the Basic's
 [How to use](../basic/README.md#how-to-use) section.
 
-Everything that is described in that section still applies, with some
-modifications:
+Everything that is described in that section still applies, with some modifications:
 
-- After creating a release tag and a new changelog section a `build.yaml`
-  workflow is called.
+- After creating a release tag and a new changelog section a `build.yaml` workflow is called.
 - `build.yaml` runs a _build_ process.
-- After that `publish-release.yaml` takes any resulting _build_ artefacts and
-  creates a GitHub release with them.
+- After that `publish-release.yaml` takes any resulting _build_ artefacts and creates a GitHub
+  release with them.
 
-If anything goes wrong during `build.yaml` and `publish-release.yaml` workflows
-then the created release tag and Changelog update commit are deleted from the
-`main` branch.
+If anything goes wrong during `build.yaml` and `publish-release.yaml` workflows then the created
+release tag and Changelog update commit are deleted from the `main` branch.
 
 ### Pull requests
 
-Below workflows are automatically triggered whenever a PR is opened, reopened,
-or a new commit is pushed to the PR:
+Below workflows are automatically triggered whenever a PR is opened, reopened, or a new commit is
+pushed to the PR:
 
 - `build.yaml` (aka. _build_ process)
 - `twister.yaml`
@@ -117,10 +108,10 @@ or a new commit is pushed to the PR:
 
 ## How to configure build
 
-Besides a bit of Zephyr-specific environment setup and caching, the `build.yaml`
-is very generic and makes no assumptions about what a Zephyr project needs to do
-to build artefacts and create releases. The generic approach comes from using
-Make and the `makefile` file present in the project's root directory.
+Besides a bit of Zephyr-specific environment setup and caching, the `build.yaml` is very generic and
+makes no assumptions about what a Zephyr project needs to do to build artefacts and create releases.
+The generic approach comes from using Make and the `makefile` file present in the project's root
+directory.
 
 After running the equivalent of the below commands:
 
@@ -145,51 +136,45 @@ make release        # Only called in PRs and during release process, skipped in 
 make pre-package    # Only called in release process, skipped in other cases
 ```
 
-It is up to the developer to decide what these commands do. A good starting
-point is the
-[makefile](https://github.com/IRNAS/irnas-zephyr-template/blob/main/makefile)
-that is provided by `irnas-zephyr-template` repo by default.
+It is up to the developer to decide what these commands do. A good starting point is the
+[makefile](https://github.com/IRNAS/irnas-zephyr-template/blob/main/makefile) that is provided by
+`irnas-zephyr-template` repo by default.
 
-Note: all `make` commands are executed from the root of the cloned repository.
-Even if some command would `cd` into some other folder, the next command would
-still execute from the root.
+Note: all `make` commands are executed from the root of the cloned repository. Even if some command
+would `cd` into some other folder, the next command would still execute from the root.
 
 Expected behaviour of each `make` command:
 
 - `make install-dep` - Installs tooling needed by the project.
-- `make project-setup` - Sets up the project and any tooling that might depend
-  on it.
+- `make project-setup` - Sets up the project and any tooling that might depend on it.
 - `make pre-build` - Runs commands that need to run before the _build_.
-- `make quick-build` - Usually a single build command, used for building the
-  build configuration that should be checked at every single commit.
-- `make release` - A set of build commands whose binaries would end in the
-  release.
-- `make pre-package` - Only used in the release process, it is skipped if the
-  workflow was triggered due to a PR. Use it to package build artefacts.
+- `make quick-build` - Usually a single build command, used for building the build configuration
+  that should be checked at every single commit.
+- `make release` - A set of build commands whose binaries would end in the release.
+- `make pre-package` - Only used in the release process, it is skipped if the workflow was triggered
+  due to a PR. Use it to package build artefacts.
 
 ### Packaging build artefacts
 
-In release process, the `build.yaml` will collect any files found in the
-`artefacts` folder of the project's root directory and attach them to the newly
-created a GitHub release as release artefacts.
+In release process, the `build.yaml` will collect any files found in the `artefacts` folder of the
+project's root directory and attach them to the newly created a GitHub release as release artefacts.
 
-The developer can use the `make pre-package` command to create the `artefacts`
-folder and move any files of interest inside it.
+The developer can use the `make pre-package` command to create the `artefacts` folder and move any
+files of interest inside it.
 
-Packaging of build artefacts is done only in release processes, it is skipped if
-the workflow was triggered due to a PR or due to a push to the `main` branch.
+Packaging of build artefacts is done only in release processes, it is skipped if the workflow was
+triggered due to a PR or due to a push to the `main` branch.
 
 ### Adding extra text to the Release notes
 
-Some projects need additional information in the Release Notes apart from the
-changelog notes, maybe general usage instructions, an explanation of the build
-artefacts or some dynamically generated report.
+Some projects need additional information in the Release Notes apart from the changelog notes, maybe
+general usage instructions, an explanation of the build artefacts or some dynamically generated
+report.
 
-To do that the `make pre-package` command can copy into the `artefacts` folder
-the `pre_changelog.md` and `post_changelog.md` markdown files.
+To do that the `make pre-package` command can copy into the `artefacts` folder the
+`pre_changelog.md` and `post_changelog.md` markdown files.
 
-Contents of these files then become a part of the Release Notes in the following
-way:
+Contents of these files then become a part of the Release Notes in the following way:
 
 ```markdown
 # Release notes
@@ -201,29 +186,27 @@ way:
 {Contents of the post_changelog.md}
 ```
 
-If a section is not used, the corresponding file can be empty.
-`pre_changelog.md` and `post_changelog.md` files are not attached to the created
-release, even though they are present in the `artefacts` folder.
+If a section is not used, the corresponding file can be empty. `pre_changelog.md` and
+`post_changelog.md` files are not attached to the created release, even though they are present in
+the `artefacts` folder.
 
 ## Twister workflow
 
-Twister workflow performs the same project setup as `build.yaml` does before it
-starts executing the following `make` commands:
+Twister workflow performs the same project setup as `build.yaml` does before it starts executing the
+following `make` commands:
 
 ```bash
 make install-dep
 make project-setup
 make test
 make test-report-ci     # Runs always, even if "make test" failed
-make coverage-report-ci # Runs if make test succeded
+make coverage-report-ci # Runs if make test succeeded
 ```
 
-Expected behaviour of the `make` commands (those that weren't already described
-above):
+Expected behaviour of the `make` commands (those that weren't already described above):
 
 - `make test` - Runs tests with enabled coverage.
-- `make test-report-ci` - Creates test report. Runs always, even if `make test`
-  failed.
+- `make test-report-ci` - Creates test report. Runs always, even if `make test` failed.
 - `make coverage-report-ci` - Creates coverage report.
 
 ### Artefacts and reports
@@ -231,14 +214,12 @@ above):
 Workflow will then:
 
 - Publish test report and
-- if the `make test` command is successful, it will also publish code coverage
-  summary as a comment on the PR.
+- if the `make test` command is successful, it will also publish code coverage summary as a comment
+  on the PR.
 
-To see the test report you can click `Details` (next to any Twister check in the
-PR) -> `Summary`.
+To see the test report you can click `Details` (next to any Twister check in the PR) -> `Summary`.
 
-Artefact `test-report` will also contain `test-report.html` which can be viewed
-in browser.
+Artefact `test-report` will also contain `test-report.html` which can be viewed in browser.
 
 ![ci-checks](./ci-checks.png)
 
@@ -248,13 +229,13 @@ in browser.
 
 CodeChecker workflow solves two tasks that share many common components:
 
-- On every push to the `main` branch it builds the firmware, analyses it and
-  stores the analysis to the CodeChecker server.
-- In PRs it builds, analyses the state of the feature branch and compares it
-  against the last server analysis.
+- On every push to the `main` branch it builds the firmware, analyses it and stores the analysis to
+  the CodeChecker server.
+- In PRs it builds, analyses the state of the feature branch and compares it against the last server
+  analysis.
 
-In last case the workflow fails with an error if new errors are detected in the
-code on the feature branch.
+In last case the workflow fails with an error if new errors are detected in the code on the feature
+branch.
 
 Below `make` commands are called in the workflow:
 
@@ -268,16 +249,15 @@ make codechecker-store  # Run on the push to the `main` branch
 make codechecker-diff   # Run in the PRs
 ```
 
-Expected behaviour of the `make` commands (those that weren't already described
-above):
+Expected behaviour of the `make` commands (those that weren't already described above):
 
 - `make codechecker-build` - Builds the firmware that needs to be analysed.
 - `make codechecker-check` - Analyses the built firmware.
-- `make codechecker-store` - Stores the analysis to the server, runs only if
-  workflow was triggered due to the push to the `main` branch.
-- `make codechecker-diff` - Compares the local analysis against the one on the
-  server. If new errors are introduced it should fail the workflow, to make the
-  errors apparent to the user. Runs only if workflow was triggered due to a PR.
+- `make codechecker-store` - Stores the analysis to the server, runs only if workflow was triggered
+  due to the push to the `main` branch.
+- `make codechecker-diff` - Compares the local analysis against the one on the server. If new errors
+  are introduced it should fail the workflow, to make the errors apparent to the user. Runs only if
+  workflow was triggered due to a PR.
 
 ### Diff analysis results
 
@@ -285,11 +265,11 @@ Diff results are always uploaded as `codechecker-diff.zip` artefact.
 
 ## A short note about Make
 
-Make is a build automation tool, often used for managing source code
-dependencies and executing compiler commands.
+Make is a build automation tool, often used for managing source code dependencies and executing
+compiler commands.
 
-It can do many things, but our use of it is very simple. If we create a
-`makefile` file with the below content:
+It can do many things, but our use of it is very simple. If we create a `makefile` file with the
+below content:
 
 ```makefile
 pre-build:
@@ -299,39 +279,35 @@ quick-build:
     echo "Running quick-build target"
 ```
 
-And then run `make pre-build` or `make build`, we would be greeted with one of
-the above messages. We essentially aliased `make pre-build` and
-`make quick-build` commands to do something arbitrary.
+And then run `make pre-build` or `make build`, we would be greeted with one of the above messages.
+We essentially aliased `make pre-build` and `make quick-build` commands to do something arbitrary.
 
 To learn more about Make read the excellent
-[Memfault's Interrupt blog](https://interrupt.memfault.com/blog/gnu-make-guidelines)
-about it.
+[Memfault's Interrupt blog](https://interrupt.memfault.com/blog/gnu-make-guidelines) about it.
 
 ## Required GitHub action secrets
 
-Three secrets are required so that this workflow group works completely.
-The secrets have to be set in the project's repository under _Settings->Secrets and variables -> Actions_. Press the _New secret_ button.
+Three secrets are required so that this workflow group works completely. The secrets have to be set
+in the project's repository under _Settings->Secrets and variables -> Actions_. Press the _New
+secret_ button.
 
 ### General secrets
 
-A fine-grained PAT (personal access token) needs to be provided so that action
-runner can clone IRNAS's private repos.
+A fine-grained PAT (personal access token) needs to be provided so that action runner can clone
+IRNAS's private repos.
 
 Steps:
 
-1. Go to the [www.github.com](www.github.com), click on you profile picture on
-   the top-right, and select _Settings -> Developer settings_.
-2. Click _Personal access tokens -> fine-grained tokens_ and click button
-   _Generate new token_.
-3. Set the name of the token to the exact repository name plus `_runner`
-   postfix. For example, if you are configuring token for
-   `irnas-workflows-documentation` repo, then name of the token must be
-   `irnas-workflows-documentation_runner`.
+1. Go to the [www.github.com](www.github.com), click on you profile picture on the top-right, and
+   select _Settings -> Developer settings_.
+2. Click _Personal access tokens -> fine-grained tokens_ and click button _Generate new token_.
+3. Set the name of the token to the exact repository name plus `_runner` postfix. For example, if
+   you are configuring token for `irnas-workflows-documentation` repo, then name of the token must
+   be `irnas-workflows-documentation_runner`.
 4. Set the **Expiration** to a 1 year, use `custom` option for that.
 5. Set **Resource owner** to IRNAS.
 6. Set **Repository access** to _all repositories_.
-7. Under **Repository permissions** find **Contents** and set access to
-   "Read-only".
+7. Under **Repository permissions** find **Contents** and set access to "Read-only".
 8. Click _Generate token_ button at the bottom.
 9. Copy the generated token.
 10. Create a new github action secret named `GIT_CREDENTIALS` and paste the token.
@@ -344,15 +320,19 @@ Steps:
 
 CodeChecker requires the following secrets to function:
 
-1. `CODECHECKER_CREDENTIALS` - JSON string with credentials for the CodeChecker
-  server in the following format: `{"client_autologin":true,"credentials":{"<server_url_with_port>":"<ci_username>:<ci_password>"}}`.
+1. `CODECHECKER_CREDENTIALS` - JSON string with credentials for the CodeChecker server in the
+   following format:
+   `{"client_autologin":true,"credentials":{"<server_url_with_port>":"<ci_username>:<ci_password>"}}`.
 2. `CODECHECKER_SERVER_URL` - URL where the CodeChecker server is running.
 
 For the IRNAS server URL and password, check 1Password by searching "ci_user".
 
 ## Self hosted runners
 
-The `build.yaml` and `twister.yaml` workflows are configured to run on self-hosted GitHub runners. These runners are hosted on the internal Irnas server. 
+The `build.yaml` and `twister.yaml` workflows are configured to run on self-hosted GitHub runners.
+These runners are hosted on the internal Irnas server.
 
-To change the runner configuration back to the default GitHub runners, modify the `runs-on` field in the workflow file. 
-This can be done by running the `sed -i 's/self-hosted/ubuntu-20.04/' .github/workflows/*.yaml` command from the root directory of the repository you wish to modify the workflows in.
+To change the runner configuration back to the default GitHub runners, modify the `runs-on` field in
+the workflow file. This can be done by running the
+`sed -i 's/self-hosted/ubuntu-20.04/' .github/workflows/*.yaml` command from the root directory of
+the repository you wish to modify the workflows in.

@@ -10,22 +10,18 @@ make test-remote
 make test-report-ci     # Runs always, even if "make test-remote" failed
 ```
 
-Expected behaviour of the `make` commands (those that weren't already described
-above):
+Expected behaviour of the `make` commands (those that weren't already described above):
 
 - `make test-remote` - Runs tests on board connected to a remote J-Link via Raspberry Pi.
-- `make test-report-ci` - Creates test report. Runs always, even if `make test`
-  failed.
+- `make test-report-ci` - Creates test report. Runs always, even if `make test` failed.
 - `make coverage-report-ci` - Creates coverage report.
 
-### Artefacts and reports
+## Artefacts and reports
 
 Workflow will then:
 
 - Publish test report
 
-To see the test report you can click `Details` (next to any Twister check in the
-PR) -> `Summary`.
+To see the test report you can click `Details` (next to any Twister check in the PR) -> `Summary`.
 
-Artefact `test-report` will also contain `test-report.html` which can be viewed
-in browser.
+Artefact `test-report` will also contain `test-report.html` which can be viewed in browser.

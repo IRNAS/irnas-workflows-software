@@ -21,33 +21,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
--   Split `migrate_gitflow_to_tbd.sh` script into another, `update_ci_infra.sh` 
-    script. First one now only does the branching model migration, second on 
+-   Split `migrate_gitflow_to_tbd.sh` script into another, `update_ci_infra.sh`
+    script. First one now only does the branching model migration, second on
     updates the files related to the CI infrastructure.
 
 ## [0.4.0] - 2023-10-01
 
 ### Added
 
--   CodeChecker workflow. On every push to the `main` branch it builds the 
+-   CodeChecker workflow. On every push to the `main` branch it builds the
     firmware, analyses it and stores the analysis to the CodeChecker server.
     In PRs it builds, analyses the state of the feature branch and compares it
-    against the last server analysis. 
+    against the last server analysis.
 
 ### Changed
 
 -   Improve existing `build.yaml` and `twister.yaml` workflows.
     -   APT dependencies are now installed directly in the workflows instead
-        of in the makefiles. They can now be cached, which means faster setup 
+        of in the makefiles. They can now be cached, which means faster setup
         time of required workflow environments.
-    -   `make install-test-dep` target was completely removed due to the above 
+    -   `make install-test-dep` target was completely removed due to the above
         change.
     -   Build workflow is now triggered on every push to the `main` branch.
         Only new `make quick-build` target is run in that case, everything
         else stays the same.
     -   `make build` was renamed to the `make release` to better convey its
         purpose.
--   Documentation in **workflow-templates/zephyr/README.md** was updated 
+-   Documentation in **workflow-templates/zephyr/README.md** was updated
     accordingly.
 
 ### Fixed
@@ -75,8 +75,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
--   Deprecated contents of the _Basic_ group and moved them into _Old Basic_ 
-    group. _Basic_ group now contains workflow files suited for trunk based 
+-   Deprecated contents of the _Basic_ group and moved them into _Old Basic_
+    group. _Basic_ group now contains workflow files suited for trunk based
     development.
 
 ## [0.1.0] - 2022-06-07
