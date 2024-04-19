@@ -63,8 +63,7 @@ if [[ -n "$(git status -s)" ]]; then
 fi
 
 # Make sure that we are really in top level directory.
-cd "$(git rev-parse --show-toplevel)" ||
-echo "Failed to move to the top level git directory" && exit 1
+cd "$(git rev-parse --show-toplevel)"
 
 # Checkout main just in case there was no dev to begin with
 git checkout main

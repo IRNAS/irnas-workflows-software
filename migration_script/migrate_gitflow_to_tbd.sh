@@ -37,8 +37,7 @@ if [[ -n "$(git status -s)" ]]; then
 fi
 
 # Make sure that we are really in top level directory.
-cd "$(git rev-parse --show-toplevel)" ||
-echo "Failed to move to the top level git directory" && exit 1
+cd "$(git rev-parse --show-toplevel)"
 
 # Make sure that the state of the repository is as expected.
 git checkout master
