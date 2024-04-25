@@ -93,8 +93,13 @@ if [[ "$WORKFLOW_GROUP" == "zephyr" ]]; then
     cp ${TEMPLATE_REPO}/.clang-tidy .
     cp ${TEMPLATE_REPO}/.clangd .
     cp ${TEMPLATE_REPO}/.gitignore .
-    cp ${TEMPLATE_REPO}/.gitlint .
     cp ${TEMPLATE_REPO}/codechecker_config.yaml .
+    cp ${TEMPLATE_REPO}/.markdownlint.yaml .
+    cp ${TEMPLATE_REPO}/.pre-commit-config.yaml .
+    cp ${TEMPLATE_REPO}/.prettierrc .
+    cp ${TEMPLATE_REPO}/committed.toml .
+    cp ${TEMPLATE_REPO}/ruff.toml .
+    cp ${TEMPLATE_REPO}/typos.toml .
 fi
 
 rm -fr ${TEMPLATE_REPO}
