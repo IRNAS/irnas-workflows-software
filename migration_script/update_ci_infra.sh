@@ -100,6 +100,7 @@ if [[ "$WORKFLOW_GROUP" == "zephyr" ]]; then
     cp ${TEMPLATE_REPO}/committed.toml .
     cp ${TEMPLATE_REPO}/ruff.toml .
     cp ${TEMPLATE_REPO}/typos.toml .
+    cp ${TEMPLATE_REPO}/.cmake-format.yaml .
 fi
 
 rm -fr ${TEMPLATE_REPO}
