@@ -329,10 +329,13 @@ For the IRNAS server URL and password, check 1Password by searching "ci_user".
 
 ## Self hosted runners
 
-The `build.yaml` and `twister.yaml` workflows are configured to run on self-hosted GitHub runners.
-These runners are hosted on the internal Irnas server.
+The workflows are configured to run on self-hosted GitHub runners. These runners are hosted on the
+internal Irnas server.
 
 To change the runner configuration back to the default GitHub runners, modify the `runs-on` field in
-the workflow file. This can be done by running the
-`sed -i 's/self-hosted/ubuntu-20.04/' .github/workflows/*.yaml` command from the root directory of
-the repository you wish to modify the workflows in.
+the workflow file. This can be done by running the command from the root directory of the repository
+you wish to modify the workflows in:
+
+```bash
+sed -i 's/runs-on: self-hosted/runs-on: ubuntu-20.04/' .github/workflows/*.yaml
+```
