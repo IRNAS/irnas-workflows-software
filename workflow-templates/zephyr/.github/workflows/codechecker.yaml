@@ -73,7 +73,7 @@ jobs:
 
       - name: Install and cache apt packages
         if: contains(runner.name, 'Github Action')
-        uses: awalsh128/cache-apt-pkgs-action@latest
+        uses: awalsh128/cache-apt-pkgs-action@v1.4.1
         with:
           packages: clang-16 clang-tidy-16 cppcheck gcc-multilib
           # Update this manually when changing the packages above, increment
@@ -94,7 +94,7 @@ jobs:
 
       - name: Retrieve cache
         if: contains(runner.name, 'Github Action')
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-modules
         with:
@@ -117,7 +117,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.8"
+          python-version: "3.10"
           cache: "pip"
           cache-dependency-path: project/scripts/requirements.txt
 
