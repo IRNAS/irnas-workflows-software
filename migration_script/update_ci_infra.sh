@@ -10,26 +10,6 @@
 #    do not have any uncommitted changes and any unmerged PRs.
 #
 
-# Details:
-#   If WORKFLOW_GROUP is "basic", then the following will be done:
-#       1. Clone the irnas-projects-template repository and copy its .github
-#       directory into the current repository.
-#       2. Delete the irnas-projects-template repository.
-#       3. Create a new commit with all the changes on the main and push to
-#       the remote.
-#
-#   If WORKFLOW_GROUP is "zephyr", then the following will be done:
-#       1. Clone the irnas-zephyr-template repository and copy its .github
-#       directory into the current repository.
-#       2. Copy scripts/requirements.txt.
-#       3. Copy scripts/pre_changelog.md and scripts/post_changelog.md files
-#       4. Copy makefile.
-#       5. Copy ci scripts.
-#       5. Copy dotfiles.
-#       6. Delete the irnas-zephyr-template repository.
-#       7. Create a new commit with all the changes on the main and push to
-#       the remote.
-
 echo "Confirm the following statement: "
 echo " - You don't have any uncommitted or untracked changes laying around."
 echo ""
@@ -63,12 +43,13 @@ if [[ -n "$(git status -s)" ]]; then
 fi
 
 # Make sure that we are really in top level directory.
+# shellcheck disable=SC2164
 cd "$(git rev-parse --show-toplevel)"
 
 # Checkout main just in case there was no dev to begin with
 git checkout main
 
-if [[ "$WORKFLOW_GROUP" == "basic" ]]; then
+if [[ $WORKFLOW_GROUP == "basic" ]]; then
     TEMPLATE_REPO="irnas-projects-template"
 else
     TEMPLATE_REPO="irnas-zephyr-template"
@@ -81,7 +62,17 @@ git clone https://github.com/IRNAS/${TEMPLATE_REPO}.git
 rm -fr .github
 cp -r ${TEMPLATE_REPO}/.github .
 
-if [[ "$WORKFLOW_GROUP" == "zephyr" ]]; then
+if [[ $WORKFLOW_GROUP == "basic" ]]; then
+    cp ${TEMPLATE_REPO}/.gitignore .
+    cp ${TEMPLATE_REPO}/.markdownlint.yaml .
+    cp ${TEMPLATE_REPO}/.pre-commit-config.yaml .
+    cp ${TEMPLATE_REPO}/.prettierrc .
+    cp ${TEMPLATE_REPO}/committed.toml .
+    cp ${TEMPLATE_REPO}/ruff.toml .
+    cp ${TEMPLATE_REPO}/typos.toml .
+fi
+
+if [[ $WORKFLOW_GROUP == "zephyr" ]]; then
     # Create scripts folder if it does not exist.
     mkdir -p scripts
     cp ${TEMPLATE_REPO}/scripts/requirements.txt scripts
