@@ -18,12 +18,10 @@ env:
 
 jobs:
   build:
-    runs-on: self-hosted-systemd
-    container:
-      image: ghcr.io/irnas/ncs-zephyr-v2.9.0-ci:latest
+    runs-on: self-hosted
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash
         # Set work dir to "project" for all 'run' calls. Beware, everything else
         # (actions, 'with' params, etc.) still needs to reference full path.
         working-directory: project
@@ -59,7 +57,17 @@ jobs:
         run: |
           git config --global credential.helper '!f() { printf "%s\n" "username=runner" "password=$GIT_CREDENTIALS"; };f'
 
+      - name: Install and cache apt packages
+        if: contains(runner.name, 'Github Action')
+        uses: awalsh128/cache-apt-pkgs-action@v1.4.1
+        with:
+          packages: gcc-multilib
+          # Update this manually when changing the packages above, increment
+          # only minor version to keep APT caches separate.
+          version: 1.0
+
       - name: Retrieve cache
+        if: contains(runner.name, 'Github Action')
         uses: actions/cache@v4
         env:
           cache-name: cache-modules
@@ -72,9 +80,24 @@ jobs:
             test
             tools
             zephyr
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{
+            ~/.local/share/east/downloads/
+            ~/.local/share/east/tooling/nrfutil
+          # Note above two lines, if we are caching entire ~/.local/share/east
+          # folder then cache action fails during download/extract step
+          key:
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{
             hashFiles('project/west.yml') }}
           restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: project/scripts/requirements.txt
+
+      - name: Install Python dependencies
+        run: pip install -r scripts/requirements.txt
 
       - name: Install project dependencies
         run: make install-dep
@@ -90,7 +113,8 @@ jobs:
         run: make quick-build
 
       - name: Release
-        if: github.event_name == 'workflow_dispatch' || github.event_name ==
+        if:
+          github.event_name == 'workflow_dispatch' || github.event_name ==
           'pull_request'
         run: make release
 
@@ -98,15 +122,15 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: make pre-package
 
-      - name: Package artifacts
+      - name: Package artefacts
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: artifacts
-          path: project/artifacts/*
+          name: artefacts
+          path: project/artefacts/*
 
       - name: Post-build clean
-        if: always()
-        # See https://github.com/actions/runner/issues/2058 why
-        # github.workspace doesn't work.
-        run: rm -rf $GITHUB_WORKSPACE/.west
+        # Only for self hosted runners
+        # Makes sure east init does not fail in the project setup
+        if: ${{ always() && !contains(runner.name, 'Github Action') }}
+        run: rm -rf ${{ github.workspace }}/.west

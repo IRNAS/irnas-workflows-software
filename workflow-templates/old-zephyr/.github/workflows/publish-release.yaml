@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-new-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Start
@@ -30,10 +30,10 @@ jobs:
           version: ${{ env.release_version_cut }}
 
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
-          name: artifacts
-          path: artifacts
+          name: artefacts
+          path: artefacts
 
       - name: Read extra release notes
         run: |
@@ -51,7 +51,8 @@ jobs:
           rm -f artefacts/post_changelog.md
 
       - name: Publish Release
-        uses: softprops/action-gh-release@v2.2.1
+        if: ${{ !env.ACT }}
+        uses: softprops/action-gh-release@v2.0.4
         with:
           files: artefacts/*
           tag_name: ${{ env.release_version }}

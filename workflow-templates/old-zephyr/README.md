@@ -1,4 +1,4 @@
-# Zephyr workflow <!-- omit in toc -->
+# OLD Zephyr workflow <!-- omit in toc -->
 
 <!-- vim-markdown-toc GFM -->
 
@@ -9,10 +9,10 @@
   - [Release process](#release-process)
   - [Pull requests](#pull-requests)
 - [How to configure build](#how-to-configure-build)
-  - [Packaging build artifacts](#packaging-build-artifacts)
+  - [Packaging build artefacts](#packaging-build-artefacts)
   - [Adding extra text to the Release notes](#adding-extra-text-to-the-release-notes)
 - [Twister workflow](#twister-workflow)
-  - [Artifacts and reports](#artifacts-and-reports)
+  - [Artefacts and reports](#artefacts-and-reports)
 - [CodeChecker workflow](#codechecker-workflow)
   - [Diff analysis results](#diff-analysis-results)
 - [A short note about Make](#a-short-note-about-make)
@@ -20,9 +20,13 @@
   - [General secrets](#general-secrets)
   - [CodeChecker specific secrets](#codechecker-specific-secrets)
 - [Self hosted runners](#self-hosted-runners)
-- [Container versions](#container-versions)
 
 <!-- vim-markdown-toc -->
+
+<!-- prettier-ignore -->
+> [!WARNING]
+> This workflow is considered **DEPRECATED**, it is expected that as the time goes on, more and more
+> things won't work. Use at your own risk.
 
 <!-- prettier-ignore -->
 > [!WARNING]
@@ -41,12 +45,12 @@ Specifically, they provide:
 - Running various _builds_ on pushes to `main` branch, on Pull Requests and during releases
   processes,
 - Running _tests_ on Pull Requests,
-- Analyzing _builds_ with Codechecker, storing results to the server and generating diffs on Pull
+- Analysing _builds_ with Codechecker, storing results to the server and generating diffs on Pull
   Requests,
 - Caching of West modules, APT packages and toolchains downloaded by East to speed up the project
   setup,
 - A way to configure what CI does on project basis without changing workflow files,
-- A way to specify which artifacts are attached to the published GitHub releases for each project,
+- A way to specify which artefacts are attached to the published GitHub releases for each project,
 - A tag and Changelog cleanup steps when _build_ goes wrong and
 - A way to add custom text to the release notes.
 
@@ -58,13 +62,14 @@ defaults.
 
 Needed files (relative to project's root dir):
 
+- `scripts/requirements.txt`, can be empty,
 - `makefile` - Specific content is expected, see section
   [How to configure _build_](#how-to-configure-build).
 
 ### GitHub action secrets
 
-Some GitHub action secrets are required for the workflows to work. Check section
-[Required GitHub action secrets](#required-github-action-secrets) for more information.
+Currently only `codechecker.yaml` requires GitHub Action secrets to work. Check
+[CodeChecker workflow](#codechecker-workflow) section to learn what exactly is needed.
 
 ## How to use
 
@@ -91,7 +96,7 @@ Everything that is described in that section still applies, with some modificati
 
 - After creating a release tag and a new changelog section a `build.yaml` workflow is called.
 - `build.yaml` runs a _build_ process.
-- After that `publish-release.yaml` takes any resulting _build_ artifacts and creates a GitHub
+- After that `publish-release.yaml` takes any resulting _build_ artefacts and creates a GitHub
   release with them.
 
 If anything goes wrong during `build.yaml` and `publish-release.yaml` workflows then the created
@@ -109,7 +114,7 @@ pushed to the PR:
 ## How to configure build
 
 Besides a bit of Zephyr-specific environment setup and caching, the `build.yaml` is very generic and
-makes no assumptions about what a Zephyr project needs to do to build artifacts and create releases.
+makes no assumptions about what a Zephyr project needs to do to build artefacts and create releases.
 The generic approach comes from using Make and the `makefile` file present in the project's root
 directory.
 
@@ -143,7 +148,7 @@ It is up to the developer to decide what these commands do. A good starting poin
 Note: all `make` commands are executed from the root of the cloned repository. Even if some command
 would `cd` into some other folder, the next command would still execute from the root.
 
-Expected behavior of each `make` command:
+Expected behaviour of each `make` command:
 
 - `make install-dep` - Installs tooling needed by the project.
 - `make project-setup` - Sets up the project and any tooling that might depend on it.
@@ -152,26 +157,26 @@ Expected behavior of each `make` command:
   that should be checked at every single commit.
 - `make release` - A set of build commands whose binaries would end in the release.
 - `make pre-package` - Only used in the release process, it is skipped if the workflow was triggered
-  due to a PR. Use it to package build artifacts.
+  due to a PR. Use it to package build artefacts.
 
-### Packaging build artifacts
+### Packaging build artefacts
 
-In release process, the `build.yaml` will collect any files found in the `artifacts` folder of the
-project's root directory and attach them to the newly created a GitHub release as release artifacts.
+In release process, the `build.yaml` will collect any files found in the `artefacts` folder of the
+project's root directory and attach them to the newly created a GitHub release as release artefacts.
 
-The developer can use the `make pre-package` command to create the `artifacts` folder and move any
+The developer can use the `make pre-package` command to create the `artefacts` folder and move any
 files of interest inside it.
 
-Packaging of build artifacts is done only in release processes, it is skipped if the workflow was
+Packaging of build artefacts is done only in release processes, it is skipped if the workflow was
 triggered due to a PR or due to a push to the `main` branch.
 
 ### Adding extra text to the Release notes
 
 Some projects need additional information in the Release Notes apart from the changelog notes, maybe
-general usage instructions, an explanation of the build artifacts or some dynamically generated
+general usage instructions, an explanation of the build artefacts or some dynamically generated
 report.
 
-To do that the `make pre-package` command can copy into the `artifacts` folder the
+To do that the `make pre-package` command can copy into the `artefacts` folder the
 `pre_changelog.md` and `post_changelog.md` markdown files.
 
 Contents of these files then become a part of the Release Notes in the following way:
@@ -188,7 +193,7 @@ Contents of these files then become a part of the Release Notes in the following
 
 If a section is not used, the corresponding file can be empty. `pre_changelog.md` and
 `post_changelog.md` files are not attached to the created release, even though they are present in
-the `artifacts` folder.
+the `artefacts` folder.
 
 ## Twister workflow
 
@@ -203,13 +208,13 @@ make test-report-ci     # Runs always, even if "make test" failed
 make coverage-report-ci # Runs if make test succeeded
 ```
 
-Expected behavior of the `make` commands (those that weren't already described above):
+Expected behaviour of the `make` commands (those that weren't already described above):
 
 - `make test` - Runs tests with enabled coverage.
 - `make test-report-ci` - Creates test report. Runs always, even if `make test` failed.
 - `make coverage-report-ci` - Creates coverage report.
 
-### Artifacts and reports
+### Artefacts and reports
 
 Workflow will then:
 
@@ -219,7 +224,7 @@ Workflow will then:
 
 To see the test report you can click `Details` (next to any Twister check in the PR) -> `Summary`.
 
-Artifact `test-report` will also contain `test-report.html` which can be viewed in browser.
+Artefact `test-report` will also contain `test-report.html` which can be viewed in browser.
 
 ![ci-checks](./ci-checks.png)
 
@@ -249,9 +254,9 @@ make codechecker-store  # Run on the push to the `main` branch
 make codechecker-diff   # Run in the PRs
 ```
 
-Expected behavior of the `make` commands (those that weren't already described above):
+Expected behaviour of the `make` commands (those that weren't already described above):
 
-- `make codechecker-build` - Builds the firmware that needs to be analyzed.
+- `make codechecker-build` - Builds the firmware that needs to be analysed.
 - `make codechecker-check` - Analyses the built firmware.
 - `make codechecker-store` - Stores the analysis to the server, runs only if workflow was triggered
   due to the push to the `main` branch.
@@ -261,7 +266,7 @@ Expected behavior of the `make` commands (those that weren't already described a
 
 ### Diff analysis results
 
-Diff results are always uploaded as `codechecker-diff.zip` artifact.
+Diff results are always uploaded as `codechecker-diff.zip` artefact.
 
 ## A short note about Make
 
@@ -314,7 +319,7 @@ Steps:
 
 <!-- prettier-ignore -->
 > [!NOTE]
-> Token needs to be approved by the organization admin for it to work.
+> Token needs to be approved by the organisation admin for it to work.
 
 ### CodeChecker specific secrets
 
@@ -329,18 +334,13 @@ For the IRNAS server URL and password, check 1Password by searching "ci_user".
 
 ## Self hosted runners
 
-The workflows are configured to run on self-hosted GitHub runners.
+The workflows are configured to run on self-hosted GitHub runners. These runners are hosted on the
+internal Irnas server.
 
-Runner should be:
+To change the runner configuration back to the default GitHub runners, modify the `runs-on` field in
+the workflow file. This can be done by running the command from the root directory of the repository
+you wish to modify the workflows in:
 
-- Configured with the label `self-hosted-systemd`
-- Shouldn't run in Docker container themselves.
-
-Last point is important as the workflows are already configured to use Docker containers. If runners
-would also be using Docker containers, the Docker-in-Docker (DinD) would be used, which introduces
-some limitations and potential problems.
-
-## Container versions
-
-It is expected that project maintainers ensure that the Docker containers used in the workflows use
-correct versions of the Docker images.
+```bash
+sed -i 's/runs-on: self-hosted/runs-on: ubuntu-20.04/' .github/workflows/*.yaml
+```

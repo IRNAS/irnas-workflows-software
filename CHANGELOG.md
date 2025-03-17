@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+-   Migrate `zephyr` workflow to `self-hosted-systemd` runners. `zephyr` workflow now uses Docker
+    containers to manage tooling and dependencies.
+
+### Deprecated
+
+-  Deprecate the old `zephyr` workflow and move it into `old-zephyr` workflow folder.
+
 ## [0.6.0] - 2023-12-20
 
 ### Added
