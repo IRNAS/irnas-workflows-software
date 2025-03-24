@@ -75,7 +75,6 @@ fi
 if [[ $WORKFLOW_GROUP == "zephyr" ]]; then
     # Create scripts folder if it does not exist.
     mkdir -p scripts
-    cp ${TEMPLATE_REPO}/scripts/requirements.txt scripts
     cp ${TEMPLATE_REPO}/scripts/pre_changelog.md scripts
     cp ${TEMPLATE_REPO}/scripts/post_changelog.md scripts
     cp ${TEMPLATE_REPO}/scripts/codechecker-diff.sh scripts
