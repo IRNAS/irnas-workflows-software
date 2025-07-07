@@ -79,6 +79,7 @@ if [[ $WORKFLOW_GROUP == "zephyr" ]]; then
     cp ${TEMPLATE_REPO}/scripts/post_changelog.md scripts
     cp ${TEMPLATE_REPO}/scripts/codechecker-diff.sh scripts
     cp ${TEMPLATE_REPO}/scripts/update_docker_versions.sh scripts
+    cp -r ${TEMPLATE_REPO}/scripts/lcov scripts
     cp ${TEMPLATE_REPO}/makefile .
     cp ${TEMPLATE_REPO}/.clang-format .
     cp ${TEMPLATE_REPO}/.clang-tidy .
