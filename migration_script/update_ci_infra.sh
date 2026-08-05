@@ -94,6 +94,7 @@ if [[ $WORKFLOW_GROUP == "zephyr" ]]; then
     cp ${TEMPLATE_REPO}/committed.toml .
     cp ${TEMPLATE_REPO}/ruff.toml .
     cp ${TEMPLATE_REPO}/typos.toml .
+    cp ${TEMPLATE_REPO}/typos-commit-msg.toml .
     cp ${TEMPLATE_REPO}/.cmake-format.yaml .
     cp ${TEMPLATE_REPO}/.twister_config.yaml .
 fi
